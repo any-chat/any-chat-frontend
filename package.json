@@ -1,0 +1,28 @@
+{
+  "name": "any-chat-frontend",
+  "version": "0.0.0",
+  "description": "Any Chat Frontend",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@antfu/eslint-config-ts": "^0.36.0",
+    "terser": "^5.16.5",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.1",
+    "vite-plugin-solid": "^2.5.0",
+    "vite-plugin-windicss": "^1.8.10"
+  },
+  "dependencies": {
+    "@solidjs/router": "^0.7.0",
+    "@suid/icons-material": "^0.5.9",
+    "@suid/material": "^0.10.2",
+    "@suid/vite-plugin": "^0.1.2",
+    "dexie": "^3.2.3",
+    "solid-js": "^1.6.10",
+    "solid-transition-group": "^0.0.13"
+  }
+}
