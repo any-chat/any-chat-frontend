@@ -1,114 +1,77 @@
-import { For, Show } from "solid-js";
-import AddCommentIcon from "@suid/icons-material/AddComment";
-import Close from "@suid/icons-material/Close";
-import {
-  Divider,
-  Grow,
-  List,
-  ListItem,
-  ListItemButton,
-  Stack,
-  Box,
-  IconButton,
-} from "@suid/material";
+import { Box, Divider, Grow, IconButton, List, ListItem, ListItemButton, Stack } from "@suid/material";
 import { useLayoutContext } from "../contexts/LayoutContext";
+import AddIcon from '@suid/icons-material/Add';
+import ChatBubbleOutlineIcon from '@suid/icons-material/ChatBubbleOutline';
+import DeleteOutlineIcon from '@suid/icons-material/DeleteOutline';
+
 import {
-  createNewSession,
-  deleteSession,
-  getAllSessions,
+	createNewSession,
+	deleteSession,
+	getAllSessions,
 } from "../hooks/sessions";
+import { createSignal, For, Show } from "solid-js";
 
 export default function SessionList() {
-  const layoutContext = useLayoutContext();
-  const sessions = getAllSessions();
+	const layoutContext = useLayoutContext();
+	const sessions = getAllSessions();
+	const [selectedIdx, setSelectIdx] = createSignal(-1)
 
-  console.log(sessions());
+	return (
+		<List class="flex flex-col space-y-1" sx={{
+			fontSize: layoutContext.drawer.visible ? "1rem" : "12px",
+		}}>
+			<ListItem disablePadding class="w-full mb-2">
+				<ListItemButton onClick={createNewSession} alignItems="center" class="flex justify-between">
+					<AddNewSesson />
+				</ListItemButton>
+			</ListItem>
+			<Divider />
+			<Show when={sessions().length > 0} fallback={
+				<Box class="w-full text-center pt-12px text-[#666]">暂无会话</Box>
+			}>
+				<For each={sessions()}>
+					{(session, idx) => (
+						<Grow appear in={true} {...{ timeout: idx() * 100 }}>
+							<ListItem  disablePadding secondaryAction={
+								layoutContext.drawer.visible ? (<IconButton
+									edge="end"
+									aria-label="delete"
+									onClick={() => deleteSession(session.id)}
+								>
+									<DeleteOutlineIcon />
+								</IconButton>) : null
+							}>
+								<ListItemButton onClick={() => setSelectIdx(idx())} selected={idx() === selectedIdx()}>
+									<ChatBubbleOutlineIcon class="mr-12px" sx={{ fontSize: '22px' }} />
+									<Box component="span" sx={{ fontSize: 'fontSize.default' }}>
+										<Show when={layoutContext.drawer.visible}>会话{sessions().length - idx()}</Show>
+									</Box>
 
-  /** 监听 ctrl + n 键 */
-  document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key === "n") {
-      console.log("触发 - 新建会话");
-    }
-  });
+								</ListItemButton>
+							</ListItem>
+						</Grow>
+					)}
+				</For>
+			</Show>
 
-  return (
-    // menu
-    <nav class="flex-1 overflow-y-auto overflow-x-hidden">
-      {/* menu */}
-      <List
-        class="flex flex-col space-y-1"
-        sx={{
-          fontSize: layoutContext.drawer.visible ? "1rem" : "10px",
-        }}
-      >
-        <ListItem disablePadding class="w-full mb-2">
-          <ListItemButton
-            onClick={createNewSession}
-            alignItems="center"
-            class="flex justify-between"
-          >
-            <Box
-              component={Stack}
-              justifyContent="center"
-              alignItems="center"
-              direction={layoutContext.drawer.visible ? "row" : "column"}
-              spacing={layoutContext.drawer.visible ? 1 : 0.5}
-            >
-              <div class="flex justify-center items-center">
-                <AddCommentIcon
-                  sx={{
-                    fontSize: "24px",
-                  }}
-                />
-              </div>
-              <span>
-                {layoutContext.drawer.visible ? "创建新会话" : "新会话"}
-              </span>
-            </Box>
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <For each={sessions()}>
-          {(session, idx) => (
-            <Grow appear in={true} {...{ timeout: idx() * 100 }}>
-              <ListItem
-                disablePadding
-                secondaryAction={
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => deleteSession(session.id)}
-                  >
-                    <Close
-                      sx={{
-                        fontSize: "12px",
-                      }}
-                    />
-                  </IconButton>
-                }
-              >
-                <ListItemButton
-                  disableGutters={!layoutContext.drawer.visible}
-                  sx={{
-                    justifyContent: layoutContext.drawer.visible
-                      ? "space-between"
-                      : "center",
-                    alignItems: "center",
-                    fontSize: layoutContext.drawer.visible ? "1rem" : "12px",
-                  }}
-                  selected={idx() === 2}
-                >
-                  {layoutContext.drawer.visible && "会话"}
-                  {sessions().length - idx()}
-                  <Show when={layoutContext.drawer.visible}>
-                    <span class="text-[10px] text-gray-400">三天前</span>
-                  </Show>
-                </ListItemButton>
-              </ListItem>
-            </Grow>
-          )}
-        </For>
-      </List>
-    </nav>
-  );
+		</List>
+	)
+}
+
+function AddNewSesson() {
+	const layoutContext = useLayoutContext();
+
+	return (
+		<Box
+			component={Stack}
+			justifyContent="center"
+			alignItems="center"
+			direction={layoutContext.drawer.visible ? "row" : "column"}
+		>
+			<div class="flex justify-center items-center">
+				<AddIcon class="mr-6px" />
+			</div>
+			<Show when={layoutContext.drawer.visible}>创建新会话</Show>
+		</Box>
+	)
 }

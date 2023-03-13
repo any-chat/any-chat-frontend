@@ -1,13 +1,11 @@
-import { Route, Routes } from "@solidjs/router";
+import { Route, Routes } from '@solidjs/router'
 
-import Index from "../views";
-import Session from "../views/session";
+import Index from '../views'
 
 export default () => {
-  return (
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/session/:id" element={<Session />} />
-    </Routes>
-  );
-};
+    return (
+        <Routes>
+            <Route path="/" element={<Index />} />
+        </Routes>
+    )
+}

@@ -1,16 +1,8 @@
-import { Box, Button, IconButton } from "@suid/material";
-import { Accessor, JSX } from "solid-js";
-import { useLayoutContext } from "../contexts/LayoutContext";
+import { Box, IconButton } from "@suid/material";
+import { useLayoutContext } from "../../contexts/LayoutContext";
 
-export default function MenuButton(_: JSX.ButtonHTMLAttributes<HTMLElement>) {
+export default function SideBarToggle() {
   const context = useLayoutContext();
-
-  /** 监听 ctrl + n 键 */
-  document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key === "v") {
-      context.darkMode = !context.darkMode;
-    }
-  });
 
   return (
     <IconButton

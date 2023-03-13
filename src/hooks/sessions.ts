@@ -60,29 +60,4 @@ export class Session {
     this.updateTime = updateTime || Date.now();
     this.chats = chats || [];
   }
-
-  // FIXME: 还没写完
-  async sendChat(content: string) {
-    this.chats.push({
-      type: "user",
-      content,
-      time: Date.now(),
-    });
-    fetch("/completion", {
-      method: "POST",
-      body: JSON.stringify({
-        message: this.chats.map((chat) => ({
-          role: chat.type,
-          content: chat.content,
-        })),
-      }),
-    }).then(async (res) => {
-      this.chats.push({
-        type: "assistant",
-        content: (await res.json()).data.message.reply,
-        time: Date.now(),
-      });
-    });
-    this.updateTime = Date.now();
-  }
 }
