@@ -1,18 +1,22 @@
 import { Box, IconButton } from "@suid/material";
 import SendIcon from '@suid/icons-material/Send';
+import { createSignal, JSX, onCleanup } from 'solid-js';
+import { useLayoutContext } from "../contexts/LayoutContext";
 
 export default function MessagerInput() {
+  const LayoutContext = useLayoutContext()
+  
     return (
-        <Box class="absolute left-0 bottom-0 w-full box-border py-32px">
-            <Box class="bg-[#fcc] flex items-center" sx={{
+        <Box class="absolute left-0 bottom-0 w-full box-border py-32px" >
+            <Box class="flex items-center m-0-auto" sx={{
                 width: '60%',
-                margin: '0 auto',
+                maxWidth: '640px',
                 p: '12px',
-                pb: '0px',
-                background: '#eff4fb',
-                borderRadius: '6px'
+                background: LayoutContext.darkMode ? '#383845' : '#eff4fb',
+                borderRadius: '6px',
+                boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'
             }}>
-                <AutoResizableTextarea name="my-textarea" placeholder="Type something here..." />
+                <AutoResizableTextarea name="my-textarea" placeholder="说点什么..." />
                 <IconButton>
                     <SendIcon />
                 </IconButton>
@@ -21,10 +25,8 @@ export default function MessagerInput() {
     )
 }
 
-import { createSignal, JSX, onCleanup } from 'solid-js';
 
 interface AutoResizableTextareaProps extends JSX.TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
 const AutoResizableTextarea = (props: AutoResizableTextareaProps) => {
   const [value, setValue] = createSignal('');
 

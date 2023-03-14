@@ -12,7 +12,7 @@ export class AnyChatDexie extends Dexie {
   constructor() {
     super(DB_NAME);
     this.version(DB_VERISON).stores({
-      session: "++id, updateTime",
+      session: "++id, updateTime"
     });
   }
 }

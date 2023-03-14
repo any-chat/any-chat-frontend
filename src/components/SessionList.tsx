@@ -9,12 +9,14 @@ import {
 	deleteSession,
 	getAllSessions,
 } from "../hooks/sessions";
-import { createSignal, For, Show } from "solid-js";
+import { For, Show } from "solid-js";
+import { useNavigate, useSearchParams } from "@solidjs/router";
 
 export default function SessionList() {
 	const layoutContext = useLayoutContext();
 	const sessions = getAllSessions();
-	const [selectedIdx, setSelectIdx] = createSignal(-1)
+	const navigate = useNavigate()
+	const [sp] = useSearchParams()
 
 	return (
 		<List class="flex flex-col space-y-1" sx={{
@@ -32,7 +34,7 @@ export default function SessionList() {
 				<For each={sessions()}>
 					{(session, idx) => (
 						<Grow appear in={true} {...{ timeout: idx() * 100 }}>
-							<ListItem  disablePadding secondaryAction={
+							<ListItem disablePadding secondaryAction={
 								layoutContext.drawer.visible ? (<IconButton
 									edge="end"
 									aria-label="delete"
@@ -41,12 +43,13 @@ export default function SessionList() {
 									<DeleteOutlineIcon />
 								</IconButton>) : null
 							}>
-								<ListItemButton onClick={() => setSelectIdx(idx())} selected={idx() === selectedIdx()}>
+								<ListItemButton onClick={() => navigate(`/session?si=${session.id}`)} selected={`${session.id}` === sp.si}>
 									<ChatBubbleOutlineIcon class="mr-12px" sx={{ fontSize: '22px' }} />
 									<Box component="span" sx={{ fontSize: 'fontSize.default' }}>
-										<Show when={layoutContext.drawer.visible}>会话{sessions().length - idx()}</Show>
+										<Show when={layoutContext.drawer.visible}>
+											<Box sx={{ color: "color.default", textDecoration: 'none' }}>会话{sessions().length - idx()}</Box>
+										</Show>
 									</Box>
-
 								</ListItemButton>
 							</ListItem>
 						</Grow>

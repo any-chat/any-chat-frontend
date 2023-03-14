@@ -34,7 +34,6 @@ export function getAllSessions() {
  */
 export async function createNewSession() {
   const session = new Session();
-  console.log(session);
   const id = db.session.add({
     id: session.id,
     updateTime: session.updateTime,

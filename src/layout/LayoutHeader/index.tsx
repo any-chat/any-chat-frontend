@@ -1,4 +1,5 @@
 import { Box } from "@suid/material";
+import HeaderAvatar from "./Avatar";
 import Logo from "./Logo";
 import SideBarToggle from "./SideBarToggle";
 import ThemeSwitcher from "./ThemeSwitcher";
@@ -12,8 +13,9 @@ export default function LayoutHeader() {
                 <SideBarToggle />
                 <Logo />
             </Box>
-            <Box>
+            <Box class="flex items-center space-x-2">
                 <ThemeSwitcher />
+                <HeaderAvatar />
             </Box>
         </Box>
     )
