@@ -8,10 +8,11 @@ export default function MessagerInput() {
                 width: '60%',
                 margin: '0 auto',
                 p: '12px',
+                pb: '0px',
                 background: '#eff4fb',
                 borderRadius: '6px'
             }}>
-                <textarea placeholder="说点什么..." tabindex="0" rows="1" class="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 outline-none" style="max-height: 200px; height: 24px; overflow-y: hidden;"></textarea>
+                <AutoResizableTextarea name="my-textarea" placeholder="Type something here..." />
                 <IconButton>
                     <SendIcon />
                 </IconButton>
@@ -19,3 +20,25 @@ export default function MessagerInput() {
         </Box>
     )
 }
+
+import { createSignal, JSX, onCleanup } from 'solid-js';
+
+interface AutoResizableTextareaProps extends JSX.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+const AutoResizableTextarea = (props: AutoResizableTextareaProps) => {
+  const [value, setValue] = createSignal('');
+
+  function handleInput(event: InputEvent) {
+    const target = event.target as HTMLInputElement;
+    setValue(target.value);
+    target.style.height = 'auto';
+    target.style.height = `${target.scrollHeight}px`;
+  }
+
+  onCleanup(() => {
+    const textarea = document.querySelector(`textarea[name="${props.name}"]`)!;
+    textarea.removeEventListener('input', handleInput);
+  });
+
+  return <textarea class="m-0 resize-none w-full border-0 bg-transparent outline-none" style="max-height: 100px; overflow-y: scroll;" {...props} value={value()} onInput={handleInput} />;
+};
